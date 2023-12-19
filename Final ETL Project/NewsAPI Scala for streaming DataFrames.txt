@@ -1,0 +1,27 @@
+
+========================================================================================================================================================
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+val newsArticleSchema = new StructType(Array(
+  StructField("title", StringType, true),
+  StructField("author", StringType, true),
+  StructField("publishedAt", StringType, true),
+  StructField("description", StringType, true)
+))
+
+val news = spark.readStream
+  .format("json")
+  .schema(newsArticleSchema)
+  .load("hdfs://bigdatavidhya-m:8051/home/bigdatabigdata107/news/data/")
+
+val stream = news.writeStream
+  .format("json")
+  .option("checkpointLocation", "hdfs://bigdatavidhya-m:8051/home/bigdatabigdata107/chkpt")
+  .outputMode("append")
+  .option("path", "hdfs://bigdatavidhya-m:8051/home/bigdatabigdata107/news/output/") // Change the output path
+  .start()
+
+stream.awaitTermination()
+
+============================================================================================================================================================

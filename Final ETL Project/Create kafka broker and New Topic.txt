@@ -1,0 +1,24 @@
+## Create & Describe Topic ##
+
+-- following command should be executed under the Confluent directory
+-- Creating a topic first
+-- run this command from one of the servers
+-- inside the Confluent directory type:
+
+bin/kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --topic vidhya-my-news
+
+-- To delete the topic
+
+bin/kafka-topics --delete --zookeeper localhost:2181 --topic vidhya-my-news
+
+
+-- Need to specify where zookeper is running
+-- partitions is the number of partitions you want to create (you can have more than one partition per nod)
+-- replication factor is set to 1 since we have one node (but usually 3 for replication factor)
+
+
+-- Now run a describe command to get more details about the topic
+
+bin/kafka-topics --describe --zookeeper localhost:2181 --topic vidhya-my-news
+
+-- Should see # of partitions, leader, Isr's --> not very exciting when you have one node

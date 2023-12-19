@@ -1,0 +1,20 @@
+
+
+// streaming DataFrames must include the schema
+// For newapi articles, the schema is as follows
+
+val newsArticleSchema = new StructType(Array(
+StructField(f,StringType,true),
+StructField("content",StringType,true),
+StructField("description",StringType,true),
+StructField("publishedAt",StringType,true),
+StructField("source",
+	StructType(Array(
+		StructField("id",StringType,true),
+		StructField("name",StringType,true))),
+				    true),
+StructField("title",StringType,true),
+StructField("url",StringType,true),
+StructField("urlToImage",StringType,true)))
+
+

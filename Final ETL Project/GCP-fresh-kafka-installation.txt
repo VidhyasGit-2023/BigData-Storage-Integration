@@ -1,0 +1,114 @@
+
+## ZOOKEEPER SETUP ##
+
+-- Download Zookeeper from Apache website
+-- Not all versions will work, the version below has been tested and works
+-- Note: The address may have changed, google "download Zookeeper 3.4.14" to get latest version
+
+wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz
+
+--untar
+
+tar -xzf zookeeper-3.4.14.tar.gz
+
+-- change to zookeeper and conf directory
+
+cd zookeeper-3.4.14/conf
+
+
+--Configure zoo.cfg	
+
+cp zoo_sample.cfg zoo.cfg
+
+
+-- Open zoo.cfg
+-- Note if you are using a Linux system without graphics, you cannot use gedit, you must use an inline text editor like vi or nano
+-- Look up some tutorials on these editors, for example here is one on vi https://www.youtube.com/watch?v=pU2k776i2Zw
+
+vi zoo.cfg (only for GCP or sever based machines)
+
+-- make sure you have at the end of the file: server.0=127.0.0.1:2888:3888
+-- Change data directory to /var/zookeeper
+
+--Create Zookeeper directory
+
+sudo mkdir /var/zookeeper
+
+-- Chaning ownership to local user, you need to replace username with your actual username
+-- username is what comes before the @ sign in your terminal
+
+sudo chown username:username /var/zookeeper
+
+
+-- Create myid
+-- enter server number.  First server has number "0" so put "0" in myid file
+-- Server number should match server in zoo.cfg
+
+vi /var/zookeeper/myid
+
+
+-- Start Zookeeper
+-- Change to Zookeeper directory and then
+
+bin/zkServer.sh start
+
+-- You should get a message Starting zookeeper ... STARTED
+-- You can choose start-foreground to get more information (if it does not start)
+
+## KAFKA SETUP ##
+
+-- Download Kafka distribution from Confluent
+-- kind of like cloudera for Hadoop
+-- Former engineers from LinkedIn
+-- download using ONE of the following link
+
+wget https://packages.confluent.io/archive/4.1/confluent-4.1.4-2.11.tar.gz
+
+-- or alternatively
+
+wget https://www.dropbox.com/s/vb09hq3oikwy7dn/confluent-4.1.4-2.11.tar
+
+--untar
+
+tar -xzf confluent-4.1.4-2.11.tar.gz 
+
+-- Configuration
+-- change to Confluent directory and change the following files
+
+sudo gedit etc/kafka/server.properties
+
+-- Or on GCP
+
+vi etc/kafka/server.properties
+
+-- Make sure that you broker.id = 0  (should match server ID, by default it is zero but double check)
+-- make sure you have zookeeper.connect = localhost:2181  (host name and ports)
+
+
+vi etc/kafka/zookeeper.properties
+
+-- Or on GCP
+
+vi etc/kafka/zookeeper.properties
+
+-- Make sure dataDir = /var/zookeeper
+
+
+-- Start Kafka with log files to make sure that it is running property
+
+bin/kafka-server-start etc/kafka/server.properties
+
+-- Make sure you don't get any errors (server doesn't shut down)
+-- If it does shut down, try to figure out what is wrong
+
+-- Start Kafka broker without log-files
+-- lots of log files, dumping it to the abiss
+-- nohup allows you to run the service in background
+
+nohup bin/kafka-server-start etc/kafka/server.properties > /dev/null 2>&1 &
+
+-- check out logs to make sure there is no errors (under confluence directory)
+
+-- If you want to stop Kafka server
+
+bin/kafka-server-stop

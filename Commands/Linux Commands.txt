@@ -1,0 +1,32 @@
+Present Working Directory - pwd
+listing the files & folders - ls
+listing the files & folders of the root path - ls /
+list all the details of files & folders from the root path - ls -l /
+list all the details of files & folders from the root path with the file size in human readable format - ls -lh /
+change the directory to the root (home) - cd /
+clear the screen - clear
+change the directory to the home/username - cd
+Move up to one directory - cd ..
+To open a file 
+       -l when it is displaying without any color and is there is a hypen then it is a file otherwise it is a file
+	                - vi filename
+to exit the file content - :q or ctrlC
+To create a new file - vi filename and then press i for insert mode and then type in the text
+save and exit - press escape to come out of insert mode and then type ':wq' - to write and quit the file
+To search for the text - /text to search (forward slash)
+quit the file without saving - :q!
+instead of vi to open the file we can use - nano filename (more helpful with the list of commands showing at the end)
+view the content without opening the file - cat filename
+view the content without opening the file just only few lines (new screen) - less filename
+view the content without opening the file just only few lines (in the same editor terminal)- more filename
+To make new directory - mkdir directoryname or mkdir /home/newdirectory
+To make new directory anywhere like a superuser (superuser do it) - sudo mkdir /home/newdirectory	
+To copy a file from one path to other path - cp sourcefilepath destinationfilepath - cp /home/username/test.txt /home/newdirectory/test1.txt
+- cp /home/username/test.txt /home/newdirectory/. (Same file name then use only dot)
+relative path (Starts from current directory- ls new/ - cp test.txt newdirectory/test1.txt
+Full qualified path (Starts from root directory) -  cp /home/username/test.txt /home/newdirectory/. (Same file name then use only dot)
+To move a file from one path to other path - mv sourcefilepath destinationfilepath - mv /home/username/test.txt /home/newdirectory/test1.txt
+Rename the file in the same folder - mv test.txt test1.txt
+Click Tab button in the keyboard when typing the filename which helps to fill in the full name of the file or list the related filename for our easy reference
+
+	

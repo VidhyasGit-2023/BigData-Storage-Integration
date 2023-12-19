@@ -1,0 +1,30 @@
+// create an RDD of key-value pairs representing sales
+
+
+val sales = sc.parallelize(List(("Alice", "Product A", 100),
+                                ("Bob", "Product A", 200),
+                                ("Alice", "Product B", 150),
+                                ("Bob", "Product B", 250),
+                                ("Charlie", "Product A", 300),
+                                ("Charlie", "Product B", 100)))
+
+//In order to paste multiline code in scala use ":paste" and ctrl+v and paste and again ctrl+v
+
+// use reduceByKey transformation to sum up the sales for each product
+val salesPerProduct = sales.map(x => (x._2, x._3)).reduceByKey((price1, price2) => price1 + price2)
+val salesPerProduct = sales.map(x => (x._2, x._3)).reduceByKey(_ + _)
+
+Product A 100, 200, 300 ==> 300, 300 ==> 600
+Product B 150, 250, 100 ==> 400, 100 ==> 500
+
+
+// print the result, notice here we have used a more concise form
+salesPerProduct.collect().foreach(element => println(element))
+salesPerProduct.collect().foreach(println(_))
+salesPerProduct.collect().foreach(println)
+
+
+-- The equivalent code in SQL or HiveQL would be
+
+SELECT product, SUM(sales_price) FROM sales
+GROUP BY product

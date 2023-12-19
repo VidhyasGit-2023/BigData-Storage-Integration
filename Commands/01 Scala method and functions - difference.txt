@@ -1,0 +1,22 @@
+class Employee (var name : String , var salary : Int) {
+  def printEmployeeM () : Unit = {
+    println(name + " makes $" + salary)
+  }
+  
+  val printEmployeeF = () =>{
+    println(name + " makes $" + salary)
+  }
+}
+
+
+object Main {
+  def main(args: Array[String]): Unit = {
+	//put your code here...
+    var joe = new Employee("Joe", 100000)
+    
+    println(joe.name)
+    println(joe.salary)
+
+    
+  }
+}

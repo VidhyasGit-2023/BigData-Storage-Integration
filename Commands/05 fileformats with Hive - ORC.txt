@@ -1,0 +1,147 @@
+*******************************************************
+*******************************************************
+				File Formats - ORC
+*******************************************************
+*******************************************************
+-- Download dataset for loading hive table (if not done so already in previous exercises)
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+-- add dataaset to HDFS directory (if not done so already)
+
+
+hadoop fs -mkdir -p /BigData/hive
+hadoop fs -copyFromLocal stocks_data.csv /BigData/hive
+
+
+-- Create stocks table in Hive with uncompressed dataset in HDFS location
+-- Remove DATABASE if it still exists (from previous exercises)
+
+hive> DROP DATABASE stocks_db CASCADE;
+
+-- start hive, create database and table
+
+hive> CREATE DATABASE stocks_db;
+
+hive> USE stocks_db;
+
+-- Create basic non-compressed table
+
+hive> CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/BigData/hive/'
+TBLPROPERTIES('skip.header.line.count'='1');
+
+
+-- Create ORC table
+-- Create a new database (can be a compressed database)
+
+hive> CREATE DATABASE file_formats;
+
+hive> USE file_formats;
+
+-- create a new database (for fun)
+
+CREATE DATABASE file_formats;
+
+USE file_formats;
+
+-- create a table with ORC codec
+
+hive> CREATE TABLE IF NOT EXISTS stocks_orc (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+STORED AS ORC 
+
+
+-- Notice input and output formats are now ORC packages
+
+DESCRIBE FORMATTED stocks_orc;
+
+-- populate table using INSERT INTO command
+-- notice that we have to specify database since stocks is not in file_formats database
+
+INSERT INTO stocks_orc
+SELECT * FROM stocks
+
+-- Check out file size
+
+hadoop fs -ls /user/hive/warehouse/file_formats.db/stocks_orc
+
+hadoop fs -ls -h /user/hive/warehouse/stocks_db.db/stocks
+
+-- Comparison of file sizes
+
+Original - 154.5 MB
+RCFile - 86.4 MB
+ORC - 39.9 MB
+
+104.6 MB size reduction with ORC
+
+
+-- See details of ORC file
+-- Run this command on the terminal (in hive shell must use !)
+
+hive --orcfiledump /user/hive/warehouse/file_formats.db/stocks_orc/000000_0
+
+
+-- Configuration Properties
+
+orc.compress ==> ZLIB, SNAPPY, LZ4, NONE
+orc.stripe.size
+orc.row.index.stride
+orc.create.index
+orc.stripe.row.size
+
+
+-- Can create another table with different properties for ORC file
+-- Here we are changing default compression from ZLIB to Snappy, stripe size to 256 MB, 
+-- and row index size to 20000 rows from the default 10000 rows
+
+
+hive> CREATE TABLE IF NOT EXISTS stocks_orc_config (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+STORED AS ORC 
+TBLPROPERTIES ("orc.compress"="SNAPPY","orc.stripe.size"="268435456","orc.row.index.stride"="20000");
+
+268435456 / 1024 = KB / 1024 => MB
+-- load data into new table 
+
+256 x 1024 x 1024 
+
+INSERT INTO TABLE stocks_orc_config
+SELECT s.* FROM stocks_db.stocks s;
+
+-- Check size and file statistics again
+
+hadoop fs -ls -h /user/hive/warehouse/file_formats.db/stocks_orc_config
+
+hive --orcfiledump /user/hive/warehouse/file_formats.db/stocks_orc_config/000000_0
+
+-- Queries are run as usual, what is dispalyed on screen will be human readable
+
+SELECT symbol, avg(price_close) FROM  stocks_orc
+GROUP BY symbol
+HAVING avg(price_close)>10
+LIMIT 10;

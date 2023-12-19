@@ -1,0 +1,45 @@
+Transpose Column Data into Row wise data:
+
+-- The following result is returned: 
++------------+------------+------------+
+| name       | subject    | result     |
++------------+------------+------------+
+| Bob         | Chinese          | 74         |
+| Bob         | Mathematics   | 83         |
+| Bob         | Physics           | 93         |
+|Alice         | Chinese          | 74         |
+| Alice        | Mathematics   | 84         |
+| Alice        | Physics           | 94         |
++------------+------------+------------+
+
++--------+------------+------------+------------+
+| Name   | Chinese      | Mathematics     | Physics      |
++--------+------------+------------+------------+
+| Bob       | 74               | 83                      | 93            |
+| Alice      | 74               | 84                      | 94        |
++--------+------------+------------+------------+
+
+Method 1:
+
+select name as name,
+       max(case subject when 'Chinese' then result end) as Chinese,
+       max(case subject when 'Mathematics' then result end) as Mathematics,
+       max(case subject when 'Physics' then result end) as Physics 
+from rowtocolumn 
+group by name;
+
+Examples of transposing columns to rows:
+
+Method 1:
+
+-- Remove the limit on the simultaneous execution of the ORDER BY and LIMIT clauses. This way, you can use ORDER BY to sort the results by name. 
+set odps.sql.validate.orderby.limit=false;
+-- Transpose columns to rows. 
+select name as name, subject as subject, result as result 
+from(
+     select name, 'chinese' as subject, chinese as result from columntorow 
+     union all 
+     Choose name, 'mathematics' as subject, mathematics as result from columntorow 
+     union all 
+     select name, 'physics' as subject, physics as result from columntorow) 
+order by name;

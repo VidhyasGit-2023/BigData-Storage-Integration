@@ -1,0 +1,77 @@
+*******************************************************
+*******************************************************
+				Sequence Fileformat
+*******************************************************
+*******************************************************
+
+### Create a Regular Hive Table ###
+
+-- Download dataset
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+
+hadoop fs -mkdir -p /BigData/hive
+hadoop fs -copyFromLocal stocks /BigData/hive
+
+
+-- start hive
+
+[ ~] hive
+
+-- Remove DATABASE if it still exists
+
+hive> DROP DATABASE stocks_db;
+
+-- start hive, create database and table
+
+hive> CREATE DATABASE stocks_db;
+
+hive> USE stocks_db;
+
+hive> CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/BigData/hive/'
+TBLPROPERTIES('skip.header.line.count'='1');
+
+### WORKING WITH SEQUENCE FILES ###
+
+--Table for sequence files
+hive> CREATE TABLE IF NOT EXISTS stocks_seq (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+STORED AS SEQUENCEFILE
+TBLPROPERTIES ('sequencefile.compression.type'='BLOCK', 
+'sequencefile.compression.codec'='org.apache.hadoop.io.compress.SnappyCodec');
+
+hive> DESCRIBE FORMATTED stocks_seq;
+
+
+--Insert in to stocks_seq from stocks table. This will result in files under stocks_seq stored in Sequence file format.
+
+hive> INSERT OVERWRITE TABLE stocks_seq
+SELECT * FROM stocks;
+
+hive> !hadoop fs -ls /user/hive/warehouse/stocks_db.db/stocks_seq;
+
+hadoop fs -copyToLocal /user/hive/warehouse/stocks_db.db/stocks_seq/000000_0 .
+
+vi 000000_0
+
+hive> SELECT * FROM stocks_seq
+LIMIT 10;
+

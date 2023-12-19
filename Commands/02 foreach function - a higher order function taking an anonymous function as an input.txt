@@ -1,0 +1,19 @@
+class Employee (var name : String , var salary : Int) {
+
+}
+
+
+
+object Main {
+  def main(args: Array[String]): Unit = {
+		//put your code here...
+    var joe = new Employee("Joe", 100000)
+    var john = new Employee ("John", 200000)
+    var eList = List(joe, john)
+
+    var sum = 0
+    eList.foreach( (e:Employee) => sum = sum + e.salary)
+
+    println(sum) 
+  }
+}

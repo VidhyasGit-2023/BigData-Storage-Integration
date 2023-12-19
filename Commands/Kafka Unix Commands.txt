@@ -1,0 +1,66 @@
+wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz 
+
+wget https://packages.confluent.io/archive/4.1/confluent-4.1.4-2.11.tar.gz
+
+Download Zookeeper in Virtual machine and install as per the provided video
+
+[cloudera@quickstart zookeeper-3.4.14]$ bin/zkServer.sh
+ZooKeeper JMX enabled by default
+Using config: /home/cloudera/zookeeper-3.4.14/bin/../conf/zoo.cfg
+Usage: bin/zkServer.sh {start|start-foreground|stop|restart|status|upgrade|print-cmd}
+
+Start the Zookeeper
+
+Download Kafka in Virtual machine and install as per the provided video
+
+
+
+To Create Topics:
+===================
+bin/kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --topic BigData-console-topic
+
+To Describe Topics:
+===================
+bin/kafka-topics --describe --zookeeper localhost:2181 --topic BigData-console-topic
+
+To Alter Topics:
+===================
+bin/kafka-topics --alter --zookeeper localhost:2181 --topic BigData-console-topic --partitions 3
+
+To Create Console Producer:
+============================
+bin/kafka-console-producer --broker-list localhost:9092 --topic BigData-console-topic
+
+To Create Console Consumers:
+============================
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic BigData-console-topic
+
+To Create Console Consumers Group:
+===================================
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic BigData-console-topic --from-beginning --consumer-property group.id=console-consume-group
+
+Check Partition Assignments and Offsets:
+==========================================
+bin/kafka-run-class kafka.admin.ConsumerGroupCommand --bootstrap-server localhost:9092 --describe --group console-consume-group
+
+Lab-4 : Assignment - Create three Kafka console consumers. Have two consumers belong to one group and the other belong
+to another group. Create a Kafka topic called “yourname”. Publish strings to the topic and show that the messages are
+being consumed by all the consumers. Produce enough messages such that all consumers at least
+consume one string from the topic.
+
+To Create Topics:
+===================
+bin/kafka-topics --create --zookeeper localhost:2181 --partitions 3 --replication-factor 1 --topic Vidhya-Venugopal
+
+To Create Console Producer:
+============================
+bin/kafka-console-producer --broker-list localhost:9092 --topic Vidhya-Venugopal
+
+To Create Console Consumers Group:
+===================================
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic Vidhya-Venugopal --from-beginning --consumer-property group.id=consumer-vidhya-group1
+
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic Vidhya-Venugopal --from-beginning --consumer-property group.id=consumer-vidhya-group1
+
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic Vidhya-Venugopal --from-beginning --consumer-property group.id=consumer-vidhya-group2
+

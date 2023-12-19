@@ -1,0 +1,47 @@
+*********************************************************
+*********************************************************
+                 Hive - Hive Introduction
+*********************************************************
+*********************************************************
+-- Download dataset
+
+wget https://www.dropbox.com/s/ia779cdcjfctd84/stocks
+
+
+-- Create a directory called hive under your BigData folder
+*** REMEMBER this is the folder in HDFS NOT in linux ***
+
+[~]$ hadoop fs -mkdir /BigData
+
+-- Put the stocks dataset into the new directory
+-- Here I am assuming the stocks dataset is in your home directory
+
+
+[~]$ hadoop fs -copyFromLocal /~/stocks /BigData/.
+
+-- Start the hive shell by typing hive in the terminal and pressing enter
+
+
+[~]$ hive
+
+
+
+hive> CREATE DATABASE stocks_db;
+
+hive> USE stocks_db;
+
+hive> CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
+ymd STRING,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/BigData/hive'
+TBLPROPERTIES('skip.header.line.count'='1');
+
+hive> SELECT * FROM stocks 
+LIMIT 100;

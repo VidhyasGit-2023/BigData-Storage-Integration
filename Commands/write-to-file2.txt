@@ -1,0 +1,17 @@
+#
+file="logfile2.log"
+
+if [ -f $file ] ; then
+    rm $file
+fi
+
+y=0
+
+while :
+
+do
+    echo "Big Data Integrationa and Storage $y" >> logfile2.log
+    y=`expr $y + 1`
+    echo 'sleeping for 3 seconds ...'
+    sleep 3
+done

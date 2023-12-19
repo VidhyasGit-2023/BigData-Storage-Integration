@@ -1,0 +1,1 @@
+hadoop fs -ls /BigData/flume/replication

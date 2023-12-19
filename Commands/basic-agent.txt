@@ -1,0 +1,23 @@
+
+********************************************
+            Flume - Simple
+********************************************
+
+# Download configuration file and open with text editor and fix setup
+
+wget https://www.dropbox.com/scl/fi/o2q3bdqxwyfn30v66wrsm/basic-flume.conf
+
+##To run simple flume agent##
+
+
+#conf property needs the folder where the configuration file is
+
+# -f property needs the actual name of the files
+
+# Next is the level logging you want to have, DEBUG means very granular and to put these message on the console
+
+# finally the name of the agent (should match you configuration file)
+
+
+
+flume-ng agent --conf /home/cloudera/flume/basic/ -f /home/cloudera/flume/basic/basic-flume.conf -Dflume.root.logger=DEBUG,console -Xmx1000m -n agent

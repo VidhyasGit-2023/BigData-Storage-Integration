@@ -1,0 +1,31 @@
+//Download the logfile
+
+wget https://www.dropbox.com/s/qfud4mggo008i1n/logfile.txt
+
+//Create directory in HDFS and save file
+
+hadoop fs -mkdir /BigData
+
+hadoop fs -copyFromLocal logfile.txt /BigData/.
+
+//Strat Spark shell
+
+spark-shell --master yarn
+
+val logfile = sc.textFile ("hdfs://10.128.0.48:8020/BigData/logfile.txt")
+
+val errors = logfile.filter(_.startsWith("ERROR"))
+
+// A more explicit version of the above
+
+val errors = logfile.filter(element => element.startsWith("ERROR"))
+
+
+val hdfs = errors.filter(_.contains("HDFS"))
+
+// A more explicit version of the the above code is
+
+val hdfs = errors.filter(line => line.contains("HDFS"))
+
+
+hdfs.count()

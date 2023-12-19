@@ -1,0 +1,38 @@
+class Employee (var name : String , var salary : Int) {
+  var dept = 0
+}
+class TestFunction{
+  val sumSalarySmart = (eList : List[Employee], selection: Employee => Boolean) => {
+
+    var sum = 0
+    eList.foreach(e => {
+      if (selection(e))
+      	sum += e.salary
+    })
+    
+    sum
+  }
+}
+
+
+object Main {
+  def main(args: Array[String]): Unit = {
+
+    val t = new TestFunction()
+    
+    var joe = new Employee("Joe", 100000)
+    joe.dept = 10
+    
+    var harpreet = new Employee ("Harpreet", 150000)
+    harpreet.dept = 11
+
+    var sahar = new Employee("Sahar", 125000)
+    sahar.dept = 10
+
+    val eList = List (joe, harpreet, sahar)
+    println("Total salary of all employees in department 11 is $" + t.sumSalarySmart(eList, e => e.dept != 10))
+    println("Total salary of all employees in department 11 is $" + t.sumSalarySmart(eList, e => e.dept == 11))  
+    println("Total salary of all employees $" + t.sumSalarySmart(eList, e => true))   
+    
+  }
+}

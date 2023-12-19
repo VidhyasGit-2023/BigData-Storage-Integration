@@ -1,0 +1,77 @@
+ *******************************************************
+*******************************************************
+		RCFile Format using Hive
+*******************************************************
+*******************************************************
+-- Download dataset
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+-- add dataaset to HDFS first
+
+
+hadoop fs -mkdir -p /BigData/hive
+hadoop fs -copyFromLocal stocks /BigData/hive
+
+[ ~] hive
+
+-- Remove DATABASE if it still exists
+
+hive> DROP DATABASE stocks_db;
+
+-- start hive, create database and table
+
+hive> CREATE DATABASE stocks_db;
+
+hive> USE stocks_db;
+
+-- Create basic non-compressed table
+
+hive> CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/BigData/hive/'
+TBLPROPERTIES('skip.header.line.count'='1');
+
+
+-- Create skeleton of RCFile table
+
+hive> CREATE TABLE IF NOT EXISTS stocks_rc (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+STORED AS RCFILE;
+
+
+-- Load data into RC table using INSERT INTO command
+  
+INSERT INTO TABLE stocks_rc
+SELECT * FROM stocks
+
+-- Check input and output file formats
+
+DESCRIBE FORMATTED stocks_rc;
+
+-- Read compressed data 
+
+!hadoop fs -head /user/hive/warehouse/stocks_db.db/stocks_rc/000000_0
+
+-- confirm table can be read without issues
+
+SELECT * FROM stocks_rc LIMIT 100;
+
+DESCRIBE FORMATTED stocks_rc;
+
+

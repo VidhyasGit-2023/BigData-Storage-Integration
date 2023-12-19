@@ -1,0 +1,8 @@
+
+********************************************
+            Flume - Replication
+********************************************
+
+##To run simple flume agent to demonstrate replication##
+
+flume-ng agent --conf /home/cloudera/flume/three-channel/ -f /home/cloudera/flume/three-channel/three-channel-flume.conf -Dflume.root.logger=DEBUG,console -Xmx1000m -n agent

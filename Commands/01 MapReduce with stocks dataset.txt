@@ -1,0 +1,69 @@
+--Max volume stocks
+
+-- Download dataset and save into HDFS
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+hadoop fs -mkdir /BigData
+
+hadoop fs -copyFromLocal stocks_data.csv /BigData/.
+
+-- start spark-shell
+
+spark-shell --master yarn
+
+// for GCP, change localhost to internal IP address
+
+val stocks = sc.textFile("hdfs://10.128.0.48:8020/BigData/stocks_data.csv")
+
+//following line of code is needed to remove the first line which contains header information
+
+val data = stocks.filter(element => !element.startsWith("Date"))
+
+
+val splits = data.map(e => e.split(","))
+
+// This will find maximum price per symbol
+
+prices(10, 20, 30, 40)
+
+val symbol_price = splits.map(record => (record(1), record(6).toFloat))
+
+AAPL 122
+AAPL 139
+MSFT 302
+AAL 333
+AAL 245
+MSFT 312
+MSFT 315
+AAL 111
+AAPL 180
+
+
+val max_symbol_price= symbol_price.reduceByKey((price1, price2) => Math.max(price1, price2))
+
+GROUP BY first element
+
+AAPL 122, 139, 180 --> 139 , 180 --> 180
+MSFT 302, 312, 315 --> 312, 315 --> 315
+AAL 333, 245, 111 --> 333, 111 --> 333
+
+
+
+// This will 
+val max_symbol_price= symbol_price.reduceByKey((price1, price2) => Math.max(price1, price2))
+
+// The following is an action function that starts the MapReduce
+// Using take(10) limits results to 10 records 
+
+max_symbol_price.collect().take(10).foreach(println)
+
+
+SELECT symbol, max(price_close) FROM stocks
+GROUP BY symbol 
+LIMIT 10
+
+
+
+
+

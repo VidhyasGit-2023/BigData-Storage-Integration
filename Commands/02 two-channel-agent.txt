@@ -1,0 +1,12 @@
+
+********************************************
+            Flume - Replication
+********************************************
+## Download configuration file and change properties as needed
+
+https://www.dropbox.com/s/ijh7u21l173he94/two-channel-flume.conf
+
+
+##To run simple flume agent to demonstrate replication##
+
+flume-ng agent --conf /home/cloudera/flume/two-channel/ -f /home/cloudera/flume/two-channel/two-channel-flume.conf -Dflume.root.logger=DEBUG,console -Xmx1000m -n agent

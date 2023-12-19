@@ -1,0 +1,11 @@
+-- Real stocks dataset (S&P 500)
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+-- Large stocks dataset (408 MB)
+
+wget https://www.dropbox.com/s/ia779cdcjfctd84/stocks
+
+-- Small stocks dataset (31 MB)
+
+wget https://www.dropbox.com/s/3m18vuvghvnrn2w/stocks.txt

@@ -1,0 +1,63 @@
+*******************************************************
+*******************************************************
+		AVRO Fileformat in Hive
+*******************************************************
+*******************************************************
+-- Download dataset (if not done so already)
+
+wget https://www.dropbox.com/s/2du73l37tf54uwv/stocks_data.csv
+
+-- add dataaset to HDFS (if not done so already)
+
+
+hadoop fs -mkdir -p /BigData/hive
+hadoop fs -copyFromLocal stocks /BigData/hive
+
+-- start hive
+
+[ ~] hive
+
+-- Remove DATABASE if it still exists
+
+hive> DROP DATABASE stocks_db;
+
+-- start hive, create database and table
+
+hive> CREATE DATABASE stocks_db;
+
+hive> USE stocks_db;
+
+hive> CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/BigData/hive/'
+TBLPROPERTIES('skip.header.line.count'='1');
+
+-- Create stocks_avro table
+
+CREATE TABLE IF NOT EXISTS stocks_avro (
+ymd DATE,
+symbol STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+price_adj_close FLOAT,
+volume INT)
+STORED AS AVRO;
+
+  
+INSERT INTO TABLE stocks_avro
+SELECT * FROM stocks
+
+SELECT * FROM stocks_avro LIMIT 100;
+
+DESCRIBE FORMATTED stocks_avro;
+

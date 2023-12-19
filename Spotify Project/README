@@ -1,0 +1,40 @@
+The 311-call dataset from New York City underwent a thorough analysis to produce data on the most frequently submitted service requests and complaints to the 311-call centre. The analysis revealed that the following complaint kinds were the most prevalent; therefore, it would be beneficial if each of the following complaint categories received a higher priority and an additional 25% of resources are allocated.
+
+A) Most Common Complain Types:
+
+1)	Noise Residential – 88K
+2)	HEAT/HOT WATER – 54K
+3)	Illegal Parking – 53K
+4)	Blocked Driveway – 40K
+5)	Street Condition – 35K
+6)	Street Light Condition – 33K
+7)	Request Large Bulky Collection – 32K
+8)	Noise – Street/Sidewalk – 30K
+9)	PLUMBING – 27K
+10)	HEATING – 27K
+
+B) Most Common Geographic distribution of complaints & requests:
+The city was able to determine places with higher levels of need by analysing the geographic distribution of complaints and requests in the dataset. From top to bottom, the boroughs listed below have a greater degree of need. Therefore, more of attention and priorities should be provided to the below areas.
+
+1)	BROOKLYN – 281K
+2)	QUEENS – 220K
+3)	MANHATTAN – 184K
+4)	BRONX – 176K
+5)	STATE ISLAND – 48K
+
+
+	
+
+C) Longer Response times taken for the complaint types & requests:
+The dataset includes details on how long it takes to respond and resolve to various requests and complaints. The study produced based on the accumulated requests and complaint categories that required a longer time to respond and resolve the issues. Based on these results, it appears that there is a lot of room for development. Kindly address if any hurdles or obstacles that any member of the team may be facing to resolve the issue on the stipulated time so that they may be resolved quickly, and improvements can be made to better serve the residents.
+
+1)	Noise Residential – 87588 D
+2)	HEAT/HOT WATER – 53594 D
+3)	Illegal Parking – 53227 D
+4)	Blocked Driveway – 39602 D
+5)	Street Condition – 34165 D
+6)	Street Light Condition – 32403 D
+7)	Request Large Bulky Collection – 32250 D
+8)	Noise – Street/Sidewalk – 29919 D
+9)	HEATING – 26670 D
+10)	PLUMBING – 26430D
